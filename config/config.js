@@ -1,6 +1,6 @@
 const configdb = {
-    user: 'prachya',
-    password: 'P@ssw0rdChi',
+    user: '...username',
+    password: '...Password',
     server: 'localhost\\SQLEXPRESS',
     database: 'ExapmleAPI',
     port: 1433,
