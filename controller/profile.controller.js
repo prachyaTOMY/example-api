@@ -1,22 +1,18 @@
 const sql = require('mssql');
 const config = require('../config/config');
 const Promise = require("bluebird");
+const profileService = require("../services/profile.service");
 
 const profileById = async (req, res) => {
     let id = req.params.id;
-    console.log(id);
-    let pool = await sql.connect(config)
-    let result1 = await pool.request()
-        .input('Id', sql.Int, id)
-        .query('select * from Profiles where UserId = @Id')
-        
-    let result = result1.recordset[0];
+    try {
+        let result = await profileService.profileById(id);
+        res.send({ data : result })
+        .status(200);
+    } catch (error) {
+        new Error('controller get profile err ',error)
+    }
 
-    res.send({ data : result });
-
-    pool1.on('error', err => {
-        console.log(err)
-    })
 }
 
 

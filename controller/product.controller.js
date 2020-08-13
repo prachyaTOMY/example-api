@@ -1,39 +1,29 @@
 const sql = require('mssql');
 const config = require('../config/config');
 const Promise = require("bluebird");
+const productService = require('../services/product.service');
 
 const proAllProduct = async (req, res) => {
-    let id = req.params.id;
-    console.log(id);
-    let pool = await sql.connect(config)
-    let result1 = await pool.request()
-        .query('select * from Product')
-        
-    let result = result1.recordset;
+    try {
+        let result = await productService.proAllProduct();
+        res.send({ data : result })
+        status(200);
+    } catch (error) {
+        new Error('controller get all product. err ', error);
+    }
 
-    res.send({ data : result });
-
-    pool1.on('error', err => {
-        console.log(err)
-    })
 }
 
 const proProductById = async (req, res) => {
     let id = req.params.id;
-    console.log(id);
-    let pool = await sql.connect(config)
-    let result1 = await pool.request()
-        .input('Id', sql.Int, id)
-        .query('select * from Product where Id = @Id')
-        
-    let result = result1.recordset[0];
-
-    res.send({ data : result });
-
-    pool1.on('error', err => {
-        console.log(err)
-    })
+    try {
+        let result = await productService.proProductById(id);
+        res.send({ data : result })
+        .status(200);
+    } catch (error) {
+        new Error('controller get by id product. err ', error)
+    }
 }
 
 
-module.exports = {proAllProduct,proProductById}
+module.exports = { proAllProduct, proProductById }

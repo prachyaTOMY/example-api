@@ -8,7 +8,7 @@ const orderController = require('../controller/order.controller');
 
 router.get('/', indexController.getindex);
 router.get('/user', userController.getallUser);
-router.get('/login', userController.logIn);
+router.post('/login', userController.logInUser);
 router.get('/profile/:id', profileController.profileById);
 router.get('/product', productController.proAllProduct);
 router.get('/product/:id', productController.proProductById);

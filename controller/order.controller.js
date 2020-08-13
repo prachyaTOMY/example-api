@@ -1,43 +1,27 @@
 const sql = require('mssql');
 const config = require('../config/config');
 const Promise = require("bluebird");
+const orderService = require('../services/order.service');
 
 const getAllOrder = async (req, res) => {
-    let id = req.params.id;
-    console.log(id);
-    let pool = await sql.connect(config)
-    let result1 = await pool.request()
-        .query(`select * from Orders o 
-            inner join OrdersDetail od on od.Order_Id = o.Id 
-            inner join Product p on p.Id = od.ProductId`)
-        
-    let result = result1.recordset[0];
-
-    res.send({ data : result });
-
-    pool1.on('error', err => {
-        console.log(err)
-    })
+    try {
+        let result = await orderService.getAllOrder();
+        res.send({ data : result })
+        .status(200);
+    } catch (error) {
+        new Error('controller get all order. err ', error)
+    }
 }
 
 const getByIdOder = async (req, res) => {
     let id = req.params.id;
-    console.log(id);
-    let pool = await sql.connect(config)
-    let result1 = await pool.request()
-        .input('Id', sql.Int, id)
-        .query(`select * from Orders o 
-                inner join OrdersDetail od on od.Order_Id = o.Id 
-                inner join Product p on p.Id = od.ProductId where o.Id = @Id `)
-        
-    let result = result1.recordset[0];
-
-    res.send({ data : result });
-
-    pool1.on('error', err => {
-        console.log(err)
-    })
+    try {
+        let result = await orderService.getByIdOder(id);
+        res.send({ data : result })
+        .status(200);
+    } catch (error) {
+        new Error('controller get by id order. err ', error)
+    }
 }
 
-
-module.exports = {getAllOrder,getByIdOder}
+module.exports = {getAllOrder, getByIdOder}

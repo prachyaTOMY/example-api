@@ -1,36 +1,28 @@
 const sql = require('mssql');
 const config = require('../config/config');
+const userService = require('../services/user.service');
 
 const getallUser = async (req, res) => {
-    let pool = await sql.connect(config)
-    let result1 = await pool.request()
-        .query('select * from Users')
-        
-    let result = result1.recordset[0]
-
-    res.send({ data : result });
-
-    pool1.on('error', err => {
-        console.log(err)
-    })
+    try {
+        let result = await userService.getallUser();
+        res.send({ data : result })
+        .status(200);
+    } catch (error) {
+        new Error('get all not user. err ',error)
+    }
+  
 }
 
-const logIn = async (req, res) => {
-    let { email, password } = req.body;
-    let pool = await sql.connect(config)
-    let result1 = await pool.request()
-        .input('Email', sql.NVarChar, email)
-        .input('Password', sql.NVarChar, password)
-        .query('select * from Users where = @Email and @Password')
-        
-    let result = result1.recordset[0]
-
-    res.send({ data : result });
-
-    pool1.on('error', err => {
-        console.log(err)
-    })
+const logInUser = async (req, res) => {
+    try {
+        let { email, password } = req.query;
+        let result = await userService.logIn(email,password);
+        res.send({data : result})
+        .status(200);
+    } catch (error) {
+        new Error('log in user. err ',error)
+    }
 }
 
 
-module.exports = {getallUser, logIn}
+module.exports = {getallUser, logInUser}
